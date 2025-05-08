@@ -22,39 +22,6 @@ loadCommands(client);
 loadEvents(client);
 loadInteractions(client);
 
-import { DisTube } from 'distube';
-import { SpotifyPlugin } from '@distube/spotify';
-import { SoundCloudPlugin } from '@distube/soundcloud';
-import { YtDlpPlugin } from '@distube/yt-dlp';
-
-
-client.distube = new DisTube(client, {
-    emitNewSongOnly: true,
-    emitAddSongWhenCreatingQueue: false,
-    emitAddListWhenCreatingQueue: false,
-    plugins: [
-        new SpotifyPlugin(),
-        new SoundCloudPlugin(),
-        new YtDlpPlugin()
-    ]
-});
-
-const status = queue =>
-    `**Volume:** \`${queue.volume}%\` | **Filter:** \`${queue.filters.names.join(', ') || 'Inactive'}\` |
-    **Repeat:** \`${queue.repeatMode ? (queue.repeatMode === 2 ? 'Queue' : 'Track') : 'Off'}\` |
-    **Autoplay:** \`${queue.autoplay ? 'On' : 'Off'}\``;
-
-client.distube
-    .on('playSong', (queue, song) => {
-        const embed = new EmbedBuilder()
-            .setColor('Blue')
-            .setTitle('🎶 Now Playing')
-            .setDescription(`**[${song.name}](${song.url})** - \`${song.formattedDuration}\`\n🎤 **Requested by:** ${song.user}\n${status(queue)}`)
-            .setThumbnail(song.thumbnail);
-
-        queue.textChannel.send({ embeds: [embed] }).catch(console.error);
-    });
-
 // ? Log in to Discord with your client's token
 client.login(process.env.TOKEN);
 
